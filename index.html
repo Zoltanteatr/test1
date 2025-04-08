@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3D Spiral Cards - Improved Spacing</title>
+  <title>3D Spiral Cards - Cube Debug</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
@@ -43,7 +43,6 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <div id="css-container"></div>
 
@@ -51,7 +50,7 @@
     const scene = new THREE.Scene();
     const cssScene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 10, 45); // Увеличено расстояние камеры
+    camera.position.set(0, 10, 45);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -67,18 +66,11 @@
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.7;
 
-    const loader = new THREE.GLTFLoader();
-    loader.load(
-      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/tripo_pbr_model_83e27b47-5346-4e55-bbaa-1bba61837d12.glb',
-      function (gltf) {
-        gltf.scene.scale.set(3, 3, 3);
-        scene.add(gltf.scene);
-      },
-      undefined,
-      function (error) {
-        console.error('Ошибка загрузки модели:', error);
-      }
-    );
+    // Добавим куб в центр вместо .glb
+    const geometry = new THREE.BoxGeometry(5, 5, 5);
+    const material = new THREE.MeshNormalMaterial();
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
     const cardImages = [
       'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%94%D0%96%D0%9E%D0%A0%D0%94%D0%96%20%D0%A1%D0%96%D0%90%D0%A2.png',
@@ -98,7 +90,7 @@
       element.innerHTML = `<img src='${img}' alt='card' />`;
 
       const object = new THREE.CSS3DObject(element);
-      const angle = i * Math.PI / 2.5; // более крутой угол
+      const angle = i * Math.PI / 2.5;
       const x = Math.cos(angle) * radius;
       const y = i * verticalStep;
       const z = Math.sin(angle) * radius;
@@ -111,6 +103,8 @@
 
     function animate() {
       requestAnimationFrame(animate);
+      cube.rotation.y += 0.01;
+      cube.rotation.x += 0.005;
       controls.update();
       renderer.render(scene, camera);
       cssRenderer.render(cssScene, camera);
