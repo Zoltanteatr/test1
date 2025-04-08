@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3D Spiral - Stable Version</title>
+  <title>3D Spiral Cards Final</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
@@ -24,19 +24,18 @@
       z-index: 10;
     }
     .card {
-      width: 120px;
-      height: 160px;
-      border-radius: 12px;
+      width: 100px;
+      height: 140px;
+      border-radius: 10px;
       overflow: hidden;
-      background: #ffeb3b;
-      color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: sans-serif;
-      font-weight: bold;
-      font-size: 16px;
+      background: white;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -74,28 +73,35 @@
       function (gltf) {
         gltf.scene.scale.set(3, 3, 3);
         scene.add(gltf.scene);
-        console.log('✅ Модель загружена');
       },
       undefined,
       function (error) {
-        console.error('❌ Ошибка загрузки модели:', error);
+        console.error('Ошибка загрузки модели:', error);
       }
     );
+
+    const cardImages = [
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%94%D0%96%D0%9E%D0%A0%D0%94%D0%96%20%D0%A1%D0%96%D0%90%D0%A2.png',
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%9E%D0%91%D0%9B%D0%9E%D0%96%D0%9A%D0%90%20%D0%9F%D0%A0%D0%98%D0%9C%D0%90%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F.png',
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0%20%D1%81%D0%B6%D0%B0%D1%82%D0%B0.png',
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%BE%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0%2013.png',
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81.png',
+      'https://c0f40df9-9dd3-48d8-b617-a1a14987d44d.selstorage.ru/keykeeper.png'
+    ];
 
     const radius = 10;
     const step = 2;
 
-    for (let i = 0; i < 6; i++) {
+    cardImages.forEach((img, i) => {
       const element = document.createElement('div');
       element.className = 'card';
-      element.textContent = 'Карта ' + (i + 1);
-
+      element.innerHTML = `<img src='${img}' alt='card' />`;
       const object = new THREE.CSS3DObject(element);
-      const angle = i * Math.PI * 2 / 6;
+      const angle = i * Math.PI * 2 / cardImages.length;
       object.position.set(Math.cos(angle) * radius, i * step, Math.sin(angle) * radius);
       object.rotation.y = -angle;
       cssScene.add(object);
-    }
+    });
 
     function animate() {
       requestAnimationFrame(animate);
@@ -111,8 +117,6 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       cssRenderer.setSize(window.innerWidth, window.innerHeight);
     });
-
-    console.log('🚀 Инициализация завершена');
   </script>
 </body>
 </html>
