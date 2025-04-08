@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3D Spiral Cards Final</title>
+  <title>3D Spiral Cards - Fixed</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
@@ -90,16 +90,22 @@
     ];
 
     const radius = 10;
-    const step = 2;
+    const verticalStep = 2.5;
 
     cardImages.forEach((img, i) => {
       const element = document.createElement('div');
       element.className = 'card';
       element.innerHTML = `<img src='${img}' alt='card' />`;
+
       const object = new THREE.CSS3DObject(element);
-      const angle = i * Math.PI * 2 / cardImages.length;
-      object.position.set(Math.cos(angle) * radius, i * step, Math.sin(angle) * radius);
+      const angle = i * Math.PI / 3;
+      const x = Math.cos(angle) * radius;
+      const y = i * verticalStep;
+      const z = Math.sin(angle) * radius;
+
+      object.position.set(x, y, z);
       object.rotation.y = -angle;
+
       cssScene.add(object);
     });
 
